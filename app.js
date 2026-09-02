@@ -91,7 +91,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cpfInput.addEventListener('input', syncDocumentDisplay);
 
+  // Validação estrita de preenchimento de todos os campos
+  function validateAllFields() {
+    const cliente = clienteInput.value.trim();
+    const cpf = cpfInput.value.trim();
+    const taxaAdesao = document.getElementById('taxaAdesao').value.trim();
+    const plano = document.getElementById('plano').value.trim();
+    const dataContratacao = document.getElementById('dataContratacao').value.trim();
+    const vigencia = document.getElementById('vigencia').value.trim();
+
+    if (!cliente) {
+      alert('Por favor, preencha o Nome Completo da Cliente antes de prosseguir.');
+      clienteInput.focus();
+      return false;
+    }
+    if (!cpf) {
+      alert('Por favor, preencha o CPF da Cliente antes de prosseguir.');
+      cpfInput.focus();
+      return false;
+    }
+    if (!taxaAdesao) {
+      alert('Por favor, preencha o Valor do Plano (R$).');
+      document.getElementById('taxaAdesao').focus();
+      return false;
+    }
+    if (!plano) {
+      alert('Por favor, preencha o Nome do Plano.');
+      document.getElementById('plano').focus();
+      return false;
+    }
+    if (!dataContratacao) {
+      alert('Por favor, preencha a Data da Contratação.');
+      document.getElementById('dataContratacao').focus();
+      return false;
+    }
+    if (!vigencia) {
+      alert('Por favor, preencha a Vigência Prevista.');
+      document.getElementById('vigencia').focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  // Botão "Li o Termo e Quero Assinar" -> Validar e Scroll para a Etapa 2 (Assinatura)
   btnProceedToSignature.addEventListener('click', () => {
+    if (!validateAllFields()) {
+      return;
+    }
+
     signatureSection.scrollIntoView({ behavior: 'smooth' });
     signatureSection.style.transition = 'box-shadow 0.4s ease';
     signatureSection.style.boxShadow = '0 0 0 4px rgba(234, 179, 8, 0.5)';
@@ -328,6 +376,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnSubmit.addEventListener('click', async (e) => {
     e.preventDefault();
 
+    if (!validateAllFields()) {
+      return;
+    }
+
     if (!consentCheckbox.checked) {
       alert('Você precisa aceitar os termos de uso da assinatura eletrônica para prosseguir.');
       return;
@@ -436,6 +488,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!lastSubmittedPayload) return;
     triggerDirectAttachmentDownload(lastSubmittedPayload);
   });
+
+  const btnWhatsappShare = document.getElementById('btnWhatsappShare') || document.getElementById('btnSendWhatsapp');
+  if (btnWhatsappShare) {
+    btnWhatsappShare.addEventListener('click', async () => {
+      const clienteName = clienteInput.value.trim() || 'Cliente';
+      const cleanName = clienteName.replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `Termo_de_Ciencia_Elray_${cleanName}.pdf`;
+
+      // 1. No Celular (Android / iPhone): Usar Web Share API para anexar o ARQUIVO PDF REAL direto no WhatsApp
+      if (currentPdfBlob && navigator.canShare) {
+        try {
+          const pdfFile = new File([currentPdfBlob], fileName, { type: 'application/pdf' });
+          if (navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+              files: [pdfFile],
+              title: 'Termo de Ciência Assinado - Elray Seguros'
+            });
+            return;
+          }
+        } catch (shareErr) {
+          console.log('Compartilhamento nativo cancelado ou indisponível:', shareErr);
+        }
+      }
+
+      // 2. No Computador (PC / Web Browser): Baixar o arquivo .pdf oficial e abrir o WhatsApp para envio
+      if (lastSubmittedPayload) {
+        triggerDirectAttachmentDownload(lastSubmittedPayload);
+      }
+
+      const waUrl = `https://api.whatsapp.com/send`;
+      window.open(waUrl, '_blank');
+    });
+  }
 
   btnPreviewPdf.addEventListener('click', () => {
     pdfViewerContainer.classList.toggle('hidden');
