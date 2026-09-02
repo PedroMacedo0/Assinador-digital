@@ -73,17 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastSubmittedPayload = null;
 
   // Sincronizar dados em tempo real no leitor do documento
+  function syncDocumentDisplay() {
+    const valName = clienteInput.value.trim();
+    displayClienteName.textContent = valName ? valName.toUpperCase() : '[NOME DA CLIENTE]';
+
+    const valCpf = cpfInput.value.trim();
+    displayCpf.textContent = valCpf ? valCpf : '[CPF DA CLIENTE]';
+  }
+
+  syncDocumentDisplay();
+
   clienteInput.addEventListener('input', (e) => {
-    const val = e.target.value.trim();
-    displayClienteName.textContent = val ? val.toUpperCase() : '[NOME DA CLIENTE]';
-    typedNameInput.value = val;
+    syncDocumentDisplay();
+    typedNameInput.value = e.target.value.trim();
     updateTypedSignatureDisplay();
   });
 
-  cpfInput.addEventListener('input', (e) => {
-    const val = e.target.value.trim();
-    displayCpf.textContent = val ? val : '[CPF DA CLIENTE]';
-  });
+  cpfInput.addEventListener('input', syncDocumentDisplay);
 
   btnProceedToSignature.addEventListener('click', () => {
     signatureSection.scrollIntoView({ behavior: 'smooth' });
