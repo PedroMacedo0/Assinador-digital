@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elray Seguros - Assinatura Digital de Termo de Ciência (Estilo DocuSign)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="logo-badge">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>ELRAY SEGUROS</h1>
+          <span class="cnpj-tag">CNPJ: 22.524.428/0001-76 | DocuSign Verified Engine</span>
+        </div>
+      </div>
+      <div class="partners-badge">
+        <span class="partner-label">Parceria Oficial</span>
+        <div class="partner-logos">
+          <span class="partner-chip hapvida">Hapvida Saúde</span>
+          <span class="partner-chip affix">Affix Benefícios</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-title-box">
+        <h2>TERMO DE CIÊNCIA</h2>
+        <p>Análise, Redução e Isenção de Carências • Portal de Assinatura Eletrônica Segura</p>
+      </div>
+
+      <!-- ETAPA 1: REVISÃO DO DOCUMENTO ANTES DE ASSINAR -->
+      <section class="card document-review-card" id="reviewSection">
+        <div class="card-header">
+          <div class="step-num">1</div>
+          <div class="step-header-text">
+            <h3>Revisão do Termo de Ciência</h3>
+            <span class="step-sub">Leia atenciosamente as condições do seu contrato antes de assinar</span>
+          </div>
+        </div>
+
+        <!-- Formulário de Dados da Cliente -->
+        <div class="document-info-bar">
+          <form id="termoForm" class="form-grid">
+            <div class="form-group full-width">
+              <label for="cliente">Nome Completo da Cliente</label>
+              <input type="text" id="cliente" name="cliente" placeholder="Digite o nome completo da cliente" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cpf">CPF da Cliente</label>
+              <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+            </div>
+
+            <div class="form-group">
+              <label for="taxaAdesao">Valor do plano (R$)</label>
+              <input type="text" id="taxaAdesao" name="taxaAdesao" placeholder="Ex: 150,00" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="plano">Nome do plano</label>
+              <input type="text" id="plano" name="plano" placeholder="Ex: Hapvida Nosso Plano / Affix" required>
+            </div>
+
+            <div class="form-group">
+              <label for="acomodacao">Acomodação</label>
+              <select id="acomodacao" name="acomodacao">
+                <option value="Enfermaria" selected>Enfermaria</option>
+                <option value="Apartamento">Apartamento</option>
+                <option value="Ambulatorial">Ambulatorial</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dataContratacao">Data da Contratação</label>
+              <input type="text" id="dataContratacao" name="dataContratacao" placeholder="DD/MM/AAAA" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="vigencia">Vigência Prevista</label>
+              <input type="text" id="vigencia" name="vigencia" placeholder="DD/MM/AAAA" required>
+            </div>
+          </form>
+        </div>
+
+        <!-- Leitor do Documento Completo Estilo Papel A4 / DocuSign Viewer -->
+        <div class="document-viewer-paper">
+          <div class="paper-header">
+            <div class="paper-title">ELRAY SEGUROS — TERMO DE CIÊNCIA</div>
+            <div class="paper-cnpj">CNPJ 22.524.428/0001-76</div>
+          </div>
+
+          <div class="paper-table">
+            <div><strong>OPERADORA:</strong> Hapvida Saúde (CNPJ 44.649.812/0001-38)</div>
+            <div><strong>ADMINISTRADORA:</strong> Affix Administradora de Benefícios Ltda (CNPJ 18.769.474/0001-68)
+            </div>
+          </div>
+
+          <p class="paper-intro">
+            Eu, <strong id="displayClienteName">[NOME DA CLIENTE]</strong>, inscrita no CPF nº <strong
+              id="displayCpf">[CPF DA CLIENTE]</strong>, declaro, por meio deste termo, que fui devidamente informada e estou
+            ciente das condições referentes à análise, redução e eventual isenção das carências do plano de saúde contratado,
+            cuja operadora é a Hapvida Saúde e cuja administradora é a Affix.
+          </p>
+
+          <div class="paper-clause">
+            <h4>1. ANÁLISE DAS CARÊNCIAS</h4>
+            <p>A redução ou isenção das carências não ocorre de forma automática, ficando condicionada à análise
+              documental, ao cumprimento dos requisitos estabelecidos e à aprovação da Hapvida Saúde e/ou Affix,
+              conforme as regras aplicáveis à contratação. Caso o beneficiário atenda integralmente aos critérios
+              exigidos, poderá ser concedida a redução ou isenção das carências, <strong>inclusive para parto</strong>,
+              observadas as condições deste termo e a aprovação da operadora/administradora.</p>
+          </div>
+
+          <div class="paper-clause">
+            <h4>2. DOENÇAS OU LESÕES PREEXISTENTES</h4>
+            <p>O cliente declara estar ciente de que doenças ou lesões preexistentes (DLP) não estão incluídas na
+              garantia de redução ou isenção de carências prevista neste termo. As doenças ou lesões preexistentes
+              estarão sujeitas às normas da Agência Nacional de Saúde Suplementar (ANS), à legislação vigente e às
+              condições contratuais da Hapvida Saúde, inclusive com possibilidade de aplicação de Cobertura Parcial
+              Temporária (CPT), quando legalmente cabível. Dessa forma, não há garantia de redução ou isenção para
+              procedimentos relacionados a doenças ou lesões preexistentes.</p>
+          </div>
+
+          <div class="paper-clause">
+            <h4>3. GESTANTES</h4>
+            <p>Para esta condição específica de análise de redução ou isenção de carência para parto, serão aceitas
+              gestantes com <strong>até 6 (seis) meses de gestação</strong> na data da contratação, desde que sejam
+              cumpridos todos os requisitos exigidos pela Hapvida Saúde e/ou Affix. A condição de gestante não
+              representa aprovação automática da isenção de carência para parto, permanecendo obrigatória a análise e
+              aprovação.</p>
+          </div>
+
+          <div class="paper-clause">
+            <h4>4. DATA-LIMITE PARA CONTRATAÇÃO E VIGÊNCIA</h4>
+            <p>A vigência do plano ocorrerá sempre no <strong>dia 1º de cada mês</strong>. Para que a vigência tenha
+              início no primeiro dia do mês seguinte, a contratação deverá estar integralmente concluída <strong>até o
+                dia 22 do mês anterior</strong>, incluindo a assinatura do contrato/proposta, o envio completo da
+              documentação solicitada, o preenchimento das informações necessárias, o pagamento da taxa de adesão,
+              quando aplicável, e o cumprimento das demais exigências da Hapvida Saúde e da Affix. Contratações
+              concluídas após o dia 22 poderão ter sua vigência transferida para o período subsequente, conforme as
+              regras de implantação da administradora e da operadora.</p>
+          </div>
+
+          <div class="paper-clause">
+            <h4>5. PRAZO E EFEITO DA ISENÇÃO DE CARÊNCIAS</h4>
+            <p>A análise e confirmação definitiva da redução ou isenção total das carências poderá ocorrer em
+              <strong>até 30 (trinta) dias corridos</strong> após o início da vigência do plano. Caso a redução/isenção
+              total de carências seja aprovada pela Hapvida Saúde e/ou Affix, após o período de até 30 (trinta) dias
+              corridos contado da vigência, o beneficiário <strong>ficará sem carência para os procedimentos abrangidos
+                pela aprovação, inclusive para parto</strong>, ressalvadas as doenças ou lesões preexistentes e demais
+              situações que, por lei ou pelas condições contratuais aplicáveis, não possam ser objeto de isenção.
+            </p>
+          </div>
+
+          <div class="paper-clause highlight-box">
+            <h4>6. DEVOLUÇÃO DA TAXA DE ADESÃO (GARANTIA ELRAY SEGUROS)</h4>
+            <p>Caso, após a análise da Hapvida Saúde e/ou Affix, a redução ou isenção das carências não seja aprovada
+              nas condições apresentadas ao cliente no momento da contratação, a <strong>ELRAY CORRETORA DE SEGUROS LTDA
+                - ELRAY SEGUROS, CNPJ nº 22.524.428/0001-76</strong>, realizará a <strong>devolução integral do valor
+                pago referente à taxa de adesão</strong>, observados os procedimentos administrativos necessários para a
+              restituição.</p>
+          </div>
+
+          <div class="paper-clause">
+            <h4>7. DECLARAÇÃO DE CIÊNCIA</h4>
+            <ul class="paper-list">
+              <li>a) a redução ou isenção das carências depende de análise e aprovação da Hapvida Saúde e/ou Affix;</li>
+              <li>b) não há garantia antecipada de aprovação;</li>
+              <li>c) doenças ou lesões preexistentes não possuem garantia de redução ou isenção e estarão sujeitas às
+                normas da ANS e da operadora;</li>
+              <li>d) gestantes serão aceitas para esta condição até o 6º mês de gestação, mediante análise;</li>
+              <li>e) a contratação deverá estar concluída e assinada até o dia 22, para vigência prevista no dia 1º do
+                mês seguinte;</li>
+              <li>f) a confirmação da redução ou isenção poderá ocorrer em até 30 dias corridos após a vigência;</li>
+              <li>g) caso a redução/isenção total seja aprovada, após o prazo de até 30 dias corridos da vigência o
+                beneficiário ficará sem carência para os procedimentos abrangidos pela aprovação, inclusive parto;</li>
+              <li>h) caso a condição de redução ou isenção apresentada não seja aprovada, será realizada a devolução
+                integral da taxa de adesão paga, conforme previsto neste termo.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="review-action-bar">
+          <button type="button" id="btnProceedToSignature" class="btn btn-primary btn-block btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Li e Concordo com o Termo • Avançar para Assinar
+          </button>
+        </div>
+      </section>
+
+      <!-- ETAPA 2: MÓDULO DE ASSINATURA DOCUSIGN -->
+      <section class="card signature-card" id="signatureSection">
+        <div class="card-header">
+          <div class="step-num">2</div>
+          <div class="step-header-text">
+            <h3>Assinatura Eletrônica (Estilo DocuSign)</h3>
+            <span class="step-sub">Escolha como deseja assinar seu Termo de Ciência</span>
+          </div>
+        </div>
+
+        <!-- Abas de Modo de Assinatura (DocuSign Tabs) -->
+        <div class="docusign-tabs">
+          <button type="button" class="tab-btn active" data-tab="draw">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+            Desenhar
+          </button>
+          <button type="button" class="tab-btn" data-tab="type">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 7 4 4 20 4 20 7" />
+              <line x1="9" y1="20" x2="15" y2="20" />
+              <line x1="12" y1="4" x2="12" y2="20" />
+            </svg>
+            Digitar (Fontes)
+          </button>
+          <button type="button" class="tab-btn" data-tab="upload">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Enviar Imagem
+          </button>
+        </div>
+
+        <!-- Conteúdo da Aba 1: Desenhar em Canvas -->
+        <div id="tabContentDraw" class="tab-content active">
+          <p class="signature-instructions">
+            Desenhe sua assinatura no quadro com o mouse ou dedo na tela.
+          </p>
+
+          <div class="canvas-wrapper">
+            <canvas id="signatureCanvas"></canvas>
+            <div class="canvas-placeholder" id="canvasPlaceholder">
+              <span>Assine aqui com o dedo ou mouse</span>
+            </div>
+            <div class="signature-line-label">Assinatura da Cliente</div>
+          </div>
+
+          <div class="canvas-controls">
+            <button type="button" id="btnClearCanvas" class="btn btn-secondary btn-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18" />
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+              </svg>
+              Limpar Traço
+            </button>
+          </div>
+        </div>
+
+        <!-- Conteúdo da Aba 2: Digitar Nome (Estilo DocuSign Adopt & Sign) -->
+        <div id="tabContentType" class="tab-content hidden">
+          <p class="signature-instructions">
+            Digite seu nome e escolha um estilo caligráfico de assinatura:
+          </p>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="typedNameInput">Texto da Assinatura</label>
+            <input type="text" id="typedNameInput" value="Maria Eduarda de Almeida Santos">
+          </div>
+
+          <div class="font-styles-selector">
+            <label class="font-option active">
+              <input type="radio" name="fontStyle" value="Dancing Script" checked>
+              <span class="font-preview font-dancing" id="previewDancing">Maria Eduarda</span>
+            </label>
+            <label class="font-option">
+              <input type="radio" name="fontStyle" value="Great Vibes">
+              <span class="font-preview font-greatvibes" id="previewGreatVibes">Maria Eduarda</span>
+            </label>
+            <label class="font-option">
+              <input type="radio" name="fontStyle" value="Alex Brush">
+              <span class="font-preview font-alexbrush" id="previewAlexBrush">Maria Eduarda</span>
+            </label>
+            <label class="font-option">
+              <input type="radio" name="fontStyle" value="Caveat">
+              <span class="font-preview font-caveat" id="previewCaveat">Maria Eduarda</span>
+            </label>
+          </div>
+
+          <div class="typed-signature-box">
+            <div class="docusign-tag">DOCUSIGN ADOPTED SIGNATURE</div>
+            <div id="typedSignatureDisplay" class="typed-display font-dancing">Maria Eduarda de Almeida Santos</div>
+            <div class="typed-line">Assinatura Digital Digitada e Adotada</div>
+          </div>
+        </div>
+
+        <!-- Conteúdo da Aba 3: Upload de Imagem -->
+        <div id="tabContentUpload" class="tab-content hidden">
+          <p class="signature-instructions">
+            Envie uma foto ou imagem (.png ou .jpg) da sua assinatura manuscrita:
+          </p>
+
+          <div class="upload-dropzone" id="dropzone">
+            <input type="file" id="signatureFileInput" accept="image/png, image/jpeg, image/jpg" class="hidden">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <p>Clique aqui para selecionar o arquivo de imagem</p>
+            <span class="upload-hint">PNG ou JPG até 5MB (Fundo branco/transparente)</span>
+          </div>
+
+          <div id="uploadPreviewWrapper" class="upload-preview-wrapper hidden">
+            <img id="uploadPreviewImg" src="" alt="Assinatura enviada">
+            <button type="button" id="btnRemoveUpload" class="btn btn-secondary btn-sm">Remover Imagem</button>
+          </div>
+        </div>
+
+        <!-- DocuSign Audit Trail & Consent Badge -->
+        <div class="docusign-audit-badge">
+          <div class="audit-header">
+            <div class="shield-icon">🛡️</div>
+            <div>
+              <strong>Trilha de Auditoria Digital DocuSign / Elray</strong>
+              <span class="mp-tag">Conformidade com MP 2.200-2/2001 (ICP-Brasil)</span>
+            </div>
+          </div>
+          <div class="audit-details">
+            <div><span class="lbl">ID do Documento:</span> <strong id="auditDocId">ELR-2026-894F2B</strong></div>
+            <div><span class="lbl">Carimbo de Data/Hora:</span> <span id="auditTimestamp">01/09/2026 17:20:00 BRT</span>
+            </div>
+            <div><span class="lbl">Hash SHA-256:</span> <code id="auditHash">8f9a2b7c4d3e...</code></div>
+          </div>
+
+          <label class="consent-checkbox">
+            <input type="checkbox" id="consentCheckbox" checked required>
+            <span>Concordo em utilizar assinatura eletrônica para assinar este documento da Elray Seguros.</span>
+          </label>
+        </div>
+
+        <!-- Botão Principal Adotar e Assinar (DocuSign Style) -->
+        <div class="action-box">
+          <button type="button" id="btnSubmit" class="btn btn-docusign btn-block">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+            <span id="btnText">Adotar e Assinar Termo (DocuSign PDF)</span>
+            <div id="btnSpinner" class="spinner hidden"></div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Result Overlay / Viewer -->
+      <section id="resultSection" class="card result-card hidden">
+        <div class="result-header">
+          <div class="success-icon">✓</div>
+          <div>
+            <h3>Documento Assinado e Autenticado!</h3>
+            <p>Seu Termo de Ciência foi assinado eletronicamente e o certificado digital de auditoria foi anexado.</p>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button type="button" id="btnDownloadPdf" class="btn btn-success btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Baixar PDF Assinado (DocuSign Verified)
+          </button>
+          <button id="btnWhatsappShare" class="btn btn-whatsapp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Enviar para o WhatsApp
+          </button>
+          <button id="btnPreviewPdf" class="btn btn-outline">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Visualizar PDF na Tela
+          </button>
+        </div>
+
+        <div id="pdfViewerContainer" class="pdf-viewer-container hidden">
+          <iframe id="pdfIframe" src=""></iframe>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2026 Elray Corretora de Seguros LTDA (CNPJ 22.524.428/0001-76) - Todos os direitos reservados.</p>
+      <p class="sub-footer">Parceria com Hapvida Saúde (CNPJ 44.649.812/0001-38) e Affix Benefícios (CNPJ
+        18.769.474/0001-68)</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
