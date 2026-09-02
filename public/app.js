@@ -467,9 +467,20 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPdfBlobUrl = URL.createObjectURL(currentPdfBlob);
 
       resultSection.classList.remove('hidden');
-      pdfViewerContainer.classList.remove('hidden');
-      pdfIframe.src = currentPdfBlobUrl;
 
+      // Detectar se é dispositivo móvel (smartphone/tablet)
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 640;
+
+      if (!isMobile) {
+        // No PC: exibir o visualizador iframe na página
+        pdfViewerContainer.classList.remove('hidden');
+        pdfIframe.src = currentPdfBlobUrl;
+      } else {
+        // No Celular: ocultar o iframe (que o Android bloqueia) e manter a tela limpa
+        pdfViewerContainer.classList.add('hidden');
+      }
+
+      // Disparar o download com nome de arquivo .pdf garantido via HTTP attachment
       triggerDirectAttachmentDownload(lastSubmittedPayload);
 
       resultSection.scrollIntoView({ behavior: 'smooth' });
@@ -496,7 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const cleanName = clienteName.replace(/[^a-zA-Z0-9]/g, '_');
       const fileName = `Termo_de_Ciencia_Elray_${cleanName}.pdf`;
 
-      // 1. No Celular (Android / iPhone): Usar Web Share API para anexar o ARQUIVO PDF REAL direto no WhatsApp
       if (currentPdfBlob && navigator.canShare) {
         try {
           const pdfFile = new File([currentPdfBlob], fileName, { type: 'application/pdf' });
@@ -512,7 +522,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 2. No Computador (PC / Web Browser): Baixar o arquivo .pdf oficial e abrir o WhatsApp para envio
       if (lastSubmittedPayload) {
         triggerDirectAttachmentDownload(lastSubmittedPayload);
       }
@@ -523,9 +532,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnPreviewPdf.addEventListener('click', () => {
-    pdfViewerContainer.classList.toggle('hidden');
-    if (!pdfViewerContainer.classList.contains('hidden')) {
-      pdfViewerContainer.scrollIntoView({ behavior: 'smooth' });
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 640;
+
+    if (isMobile) {
+      // No Celular: abrir o PDF em tela cheia na visualização nativa de alta definição do celular
+      if (currentPdfBlobUrl) {
+        window.open(currentPdfBlobUrl, '_blank');
+      } else if (lastSubmittedPayload) {
+        triggerDirectAttachmentDownload(lastSubmittedPayload);
+      }
+    } else {
+      // No PC: alternar exibição do iframe
+      pdfViewerContainer.classList.toggle('hidden');
+      if (!pdfViewerContainer.classList.contains('hidden')) {
+        pdfViewerContainer.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   });
 });
