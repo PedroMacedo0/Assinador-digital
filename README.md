@@ -71,20 +71,6 @@ O sistema gera automaticamente documentos em **PDF formatados em padrão A4 de 2
 
 ---
 
-## ☁️ Implantação e Publicação Gratuita (Render.com)
-
-Esta aplicação está preparada para ser publicada gratuitamente em plataformas como **Render**, **Vercel** ou **Railway**:
-
-1. Crie um repositório público no GitHub com este código.
-2. Acesse o [Render.com](https://render.com) e crie um novo **Web Service**.
-3. Conecte com o seu repositório do GitHub.
-4. Configure os comandos:
-   - **Build Command:** `npm install`
-   - **Start Command:** `node server.js`
-5. Clique em **Deploy**!
-
----
-
 ## ⚖️ Direitos e Licença
 
 **Elray Corretora de Seguros LTDA** — CNPJ: 22.524.428/0001-76  
