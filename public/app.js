@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   // Configurar URL da API (Suporta Live Server local porta 5500 e Produção Render/Vercel)
   const isLocalLiveServer = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') && window.location.port !== '3000';
@@ -325,12 +326,23 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(file);
   });
 
-  btnRemoveUpload.addEventListener('click', () => {
-    uploadedImageBase64 = null;
-    signatureFileInput.value = '';
-    uploadPreviewWrapper.classList.add('hidden');
-    dropzone.classList.remove('hidden');
-  });
+  // FUNÇÃO CORREÇÃO SAFIRA IPHONE
+  function obterAssinaturaSegura() {
+    const canvasTemp = document.createElement('canvas');
+    canvasTemp.width = canvas.width;
+    canvasTemp.height = canvas.height;
+    const ctxTemp = canvasTemp.getContext('2d');
+    
+    // Pinta o fundo de branco
+    ctxTemp.fillStyle = '#FFFFFF';
+    ctxTemp.fillRect(0, 0, canvasTemp.width, canvasTemp.height);
+    
+    // Desenha a assinatura por cima
+    ctxTemp.drawImage(canvas, 0, 0);
+    
+    // Retorna como JPEG para garantir visibilidade no Safari/PDFKit
+    return canvasTemp.toDataURL('image/jpeg', 1.0);
+  }
 
   function renderTypedSignatureToPNG(text, fontFamily) {
     const tempCanvas = document.createElement('canvas');
@@ -347,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tCtx.textBaseline = 'middle';
     tCtx.fillText(text, tempCanvas.width / 2, tempCanvas.height / 2);
 
-    return tempCanvas.toDataURL('image/png');
+    return tempCanvas.toDataURL('image/jpeg', 1.0); // Changed to JPEG to be safe
   }
 
   function triggerDirectAttachmentDownload(payload) {
@@ -392,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Por favor, desenhe sua assinatura no quadro.');
         return;
       }
-      finalSignatureBase64 = canvas.toDataURL('image/png');
+      finalSignatureBase64 = obterAssinaturaSegura(); // USING THE FIX HERE
     } else if (currentTab === 'type') {
       const typedText = typedNameInput.value.trim();
       if (!typedText) {
