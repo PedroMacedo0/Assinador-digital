@@ -8,11 +8,15 @@ const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-app.use(express.static(__dirname));
+// ==============================================================
+// CORREÇÃO: SERVIR OS ARQUIVOS VISUAIS DA PASTA "public"
+// ==============================================================
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+// ==============================================================
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
