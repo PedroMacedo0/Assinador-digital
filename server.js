@@ -58,6 +58,7 @@ function gerarPDFDocumento(req, res) {
     const dadosParaHash = `${cliente}|${cpf}|${plano}|${taxaAdesao}|${ipCliente}|${dataHoraAssinatura}|${base64Data}`;
     const hashDocumento = crypto.createHash('sha256').update(dadosParaHash).digest('hex');
 
+    console.log("TEXTO GERADOR DO HASH: ", dadosParaHash);
     // 3. INICIAR A GERAÇÃO DO PDF
     const doc = new PDFDocument({ margin: 50, size: 'A4' });
     
