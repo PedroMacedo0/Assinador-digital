@@ -10,12 +10,12 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // ==============================================================
-// SERVIR OS ARQUIVOS VISUAIS (O SITE) PARA O NAVEGADOR DO CLIENTE
+// SERVIR OS ARQUIVOS VISUAIS (O SITE) DA PASTA "public"
 // ==============================================================
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 // ==============================================================
 
