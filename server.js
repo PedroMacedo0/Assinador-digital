@@ -2,11 +2,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PDFDocument = require('pdfkit');
 const crypto = require('crypto'); // Biblioteca para gerar o Hash Criptográfico
+const path = require('path'); // Biblioteca para lidar com caminhos de arquivos
 
 const app = express();
 // Aumentamos o limite para garantir que imagens grandes de assinatura pelo celular não quebrem a requisição
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// ==============================================================
+// SERVIR OS ARQUIVOS VISUAIS (O SITE) PARA O NAVEGADOR DO CLIENTE
+// ==============================================================
+app.use(express.static(__dirname));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+// ==============================================================
 
 // Configuração para permitir acesso do Frontend (CORS básico)
 app.use((req, res, next) => {
