@@ -1,25 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const PDFDocument = require('pdfkit');
-const crypto = require('crypto'); // Biblioteca para gerar o Hash Criptográfico
-const path = require('path'); // Biblioteca para lidar com caminhos de arquivos
+const crypto = require('crypto'); 
+const path = require('path'); 
 
 const app = express();
-// Aumentamos o limite para garantir que imagens grandes de assinatura pelo celular não quebrem a requisição
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// ==============================================================
-// SERVIR OS ARQUIVOS VISUAIS (O SITE) DA PASTA "public"
-// ==============================================================
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
-// ==============================================================
 
-// Configuração para permitir acesso do Frontend (CORS básico)
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -28,7 +22,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Função centralizada para gerar e selar o PDF
 function gerarPDFDocumento(req, res) {
     const { cliente, cpf, taxaAdesao, plano, acomodacao, dataContratacao, vigencia, assinaturaBase64 } = req.body;
 
@@ -36,16 +29,13 @@ function gerarPDFDocumento(req, res) {
         return res.status(400).json({ error: "Faltam dados obrigatórios." });
     }
 
-    // 1. CAPTURA DE DADOS REAIS DE AUDITORIA (Não confia no frontend)
-    // Pega o IP real, mesmo se estiver hospedado na Render ou Vercel
+    // 1. DADOS DE AUDITORIA
     const ipCliente = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'IP não detectado';
     const userAgent = req.headers['user-agent'] || 'Navegador não detectado';
     const dataHoraAssinatura = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    
-    // Gerar um ID de Documento único e rastreável
     const docId = 'ELR-' + new Date().getFullYear() + '-' + crypto.randomBytes(4).toString('hex').toUpperCase();
 
-    // Processar a imagem da assinatura enviada do Frontend
+    // 2. PROCESSAR ASSINATURA VISUAL
     let imgBuffer = null;
     let base64Data = "";
     if (assinaturaBase64) {
@@ -53,24 +43,54 @@ function gerarPDFDocumento(req, res) {
         imgBuffer = Buffer.from(base64Data, 'base64');
     }
 
-    // 2. GERAR O HASH SHA-256 CRIPTOGRÁFICO (A Prova Jurídica)
-    // O Hash amarra os dados textuais à imagem da assinatura e ao IP/Hora
+    // 3. GERAR HASH SHA-256
     const dadosParaHash = `${cliente}|${cpf}|${plano}|${taxaAdesao}|${ipCliente}|${dataHoraAssinatura}|${base64Data}`;
     const hashDocumento = crypto.createHash('sha256').update(dadosParaHash).digest('hex');
 
-    console.log("TEXTO GERADOR DO HASH: ", dadosParaHash);
-    // 3. INICIAR A GERAÇÃO DO PDF
+    // 4. INICIAR PDF
     const doc = new PDFDocument({ margin: 50, size: 'A4' });
-    
     let filename = `Termo_Ciencia_Elray_${cliente.replace(/\s+/g, '_')}.pdf`;
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-
     doc.pipe(res);
 
     // ==========================================
-    // PÁGINA 1: O TERMO DE CIÊNCIA E ASSINATURAS
+    // PÁGINA 1: TEXTO INTEGRAL DO TERMO DE CIÊNCIA
     // ==========================================
+    doc.fontSize(14).font('Helvetica-Bold').fillColor('#1b365d').text('TERMO DE CIÊNCIA', { align: 'center' });
+    doc.fontSize(10).font('Helvetica').fillColor('#666').text('Contratação com Carência Reduzida', { align: 'center' });
+    doc.moveDown(2);
+
+    doc.fontSize(10).font('Helvetica').fillColor('#333');
+    doc.text(`Eu, ${cliente}, CPF nº ${cpf}, declaro, para os devidos fins, que estou ciente das condições referentes à contratação do meu plano de saúde realizada por intermédio da Elray Seguros.`, { align: 'justify' });
+    doc.moveDown(1);
+    
+    doc.font('Helvetica-Bold').text('Declaro estar ciente de que minha contratação foi realizada dentro de uma condição especial de redução de carências, porém não houve isenção total das carências do plano.', { align: 'justify' });
+    doc.moveDown(1);
+
+    doc.font('Helvetica-Bold').text('1. REDUÇÃO DE CARÊNCIA');
+    doc.font('Helvetica').text('Estou ciente de que, para minha contratação, foi concedida redução de carência exclusivamente para consultas e exames, de acordo com as condições aprovadas pela operadora/administradora.', { align: 'justify' });
+    doc.moveDown(1);
+
+    doc.font('Helvetica-Bold').text('2. DEMAIS PROCEDIMENTOS');
+    doc.font('Helvetica').text('Estou ciente de que internações, cirurgias, procedimentos de alta complexidade, tratamentos específicos, parto e demais coberturas que não tenham recebido redução ou isenção expressamente autorizada permanecerão sujeitos às carências previstas na proposta, contrato e regras da operadora.', { align: 'justify' });
+    doc.moveDown(1);
+
+    doc.font('Helvetica-Bold').text('3. DOENÇAS OU LESÕES PREEXISTENTES');
+    doc.font('Helvetica').text('Declaro estar ciente de que doenças ou lesões preexistentes devem ser corretamente informadas na Declaração de Saúde e poderão estar sujeitas às regras de Cobertura Parcial Temporária – CPT, quando aplicável, conforme análise da operadora.', { align: 'justify' });
+    doc.moveDown(1);
+
+    doc.font('Helvetica-Bold').text('4. CIÊNCIA DAS CONDIÇÕES');
+    doc.font('Helvetica').text('Declaro que fui devidamente informado(a) de que esta contratação não representa carência zero para todos os procedimentos.\n\nEstou ciente de que qualquer redução, aproveitamento ou isenção de carência depende exclusivamente das regras, análise e aprovação da operadora/administradora, prevalecendo sempre as condições constantes na proposta e no contrato do plano de saúde.\n\nDeclaro ainda que recebi as informações necessárias antes da conclusão da contratação e que estou de acordo em permanecer com o plano nas condições aprovadas, inclusive com as carências que não foram reduzidas ou isentas.', { align: 'justify' });
+    doc.moveDown(1);
+
+    doc.font('Helvetica-Bold').text('5. DECLARAÇÃO FINAL');
+    doc.font('Helvetica').text('Ao assinar este termo, confirmo que compreendi as condições da minha contratação e que estou de acordo com a redução concedida apenas para consultas e exames, permanecendo as demais carências conforme estabelecido pela operadora.', { align: 'justify' });
+
+    // ==========================================
+    // PÁGINA 2: RESUMO E ASSINATURAS (NOVA PÁGINA)
+    // ==========================================
+    doc.addPage();
     doc.fontSize(14).font('Helvetica-Bold').fillColor('#1b365d').text('TERMO DE CIÊNCIA', { align: 'center' });
     doc.fontSize(10).font('Helvetica').fillColor('#666').text('Redução/Isenção de Carências, Doenças Preexistentes e Pagamentos', { align: 'center' });
     doc.moveDown();
@@ -112,7 +132,6 @@ function gerarPDFDocumento(req, res) {
 
     const yAssinatura = doc.y;
 
-    // Assinatura da Cliente (Esquerda)
     if (imgBuffer) {
         doc.image(imgBuffer, 40, yAssinatura - 40, { width: 200, height: 60, align: 'center' });
     }
@@ -120,16 +139,15 @@ function gerarPDFDocumento(req, res) {
     doc.fontSize(8).text(cliente, 40, yAssinatura + 35, { width: 210, align: 'center' });
     doc.font('Helvetica').fillColor('#666').text('Assinatura da Cliente', 40, yAssinatura + 45, { width: 210, align: 'center' });
 
-    // Assinatura da Consultora (Direita)
     doc.moveTo(300, yAssinatura + 30).lineTo(510, yAssinatura + 30).stroke();
     doc.font('Helvetica-Bold').fillColor('#333').text('RAYLENE DA SILVA RAMOS', 300, yAssinatura + 35, { width: 210, align: 'center' });
     doc.font('Helvetica').fillColor('#666').text('Responsável pelo Atendimento / Consultora', 300, yAssinatura + 45, { width: 210, align: 'center' });
 
     // ==========================================
-    // PÁGINA 2: TRILHA DE AUDITORIA CRIPTOGRÁFICA
+    // PÁGINA 3: TRILHA DE AUDITORIA CRIPTOGRÁFICA
     // ==========================================
     doc.addPage();
-    doc.rect(40, 40, 515, 760).stroke('#1b365d'); // Borda de segurança na página
+    doc.rect(40, 40, 515, 760).stroke('#1b365d'); 
     
     doc.fontSize(16).font('Helvetica-Bold').fillColor('#1b365d').text('CERTIFICADO DE ASSINATURA DIGITAL', 50, 80, { align: 'center' });
     doc.fontSize(10).font('Helvetica').fillColor('#666').text('Trilha de Auditoria e Conformidade Legal', { align: 'center' });
@@ -142,7 +160,6 @@ function gerarPDFDocumento(req, res) {
     doc.font('Helvetica-Bold').text('DADOS TÉCNICOS DA ASSINATURA (LOG DE AUDITORIA):');
     doc.moveDown();
     
-    // Lista de dados técnicos impressos no documento
     const lineGap = 6;
     doc.font('Helvetica-Bold').text('ID do Documento: ', { continued: true }).font('Helvetica').text(docId).moveDown(lineGap/10);
     doc.font('Helvetica-Bold').text('Assinante: ', { continued: true }).font('Helvetica').text(cliente).moveDown(lineGap/10);
@@ -161,7 +178,6 @@ function gerarPDFDocumento(req, res) {
     doc.end();
 }
 
-// O mesmo gerador atende tanto a requisição em background quanto o download forçado
 app.post('/api/gerar-termo', gerarPDFDocumento);
 app.post('/api/download-termo', gerarPDFDocumento);
 
